@@ -1,6 +1,6 @@
 [submodule "client"]
 	path = client
-	url = https://github.com/terakilobyte/client
+	url = https://github.com/ashokhollav/client
 [submodule "server"]
 	path = server
-	url = https://github.com/terakilobyte/server
+	url = https://github.com/ashokhollav/server

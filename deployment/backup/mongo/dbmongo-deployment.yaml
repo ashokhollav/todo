@@ -1,0 +1,46 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: ./kompose convert -f docker-compose.prod.yml
+    kompose.version: ""
+  creationTimestamp: null
+  labels:
+    name: dbmongo
+  name: dbmongo
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        name: dbmongo
+    spec:
+      containers:
+      - args:
+        - mongod
+        - --port
+        - "29213"
+        - --smallfiles
+        - --logpath=/dev/null
+        env:
+        - name: MONGO_DATA_DIR
+          value: /data/db
+        image: mongo:3.6
+        name: dbmongo
+        ports:
+         - name: dbmongo
+           containerPort: 29213
+           hostPort: 29213
+        resources: {}
+        volumeMounts:
+        - mountPath: /data/db
+          name: dbmongo-claim0
+      restartPolicy: Always
+      volumes:
+      - name: dbmongo-claim0
+        persistentVolumeClaim:
+          claimName: dbmongo-claim0
+status: {}

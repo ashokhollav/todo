@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: server 
+  name: server-controller
+spec:
+  selector:
+   matchLabels:
+    name: server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: server
+    spec:
+      containers:
+      - name: server
+        env:
+        - name: MONGODB_NS
+          value: docker-todos-prod
+        - name: MONGODB_URI
+          value: mongodb://dbmongo.prod.svc.cluster.local:27017
+        - name: NODE_ENV
+          value: prod
+        - name: NODE_PATH
+          value: /usr/app/node_modules
+        image: gcr.io/devproject-ashok/server:v1.0.2
+        ports:
+        - containerPort: 8000

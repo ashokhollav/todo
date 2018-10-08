@@ -1,0 +1,52 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: ./kompose convert -f docker-compose.prod.yml
+    kompose.version: ""
+  creationTimestamp: null
+  labels:
+    io.kompose.service: server
+  name: server
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: server
+    spec:
+      containers:
+      - args:
+        - nodemon
+        - index.js
+        env:
+        - name: MONGODB_NS
+          value: docker-todos-prod
+        - name: MONGODB_URI
+          value: mongodb://dbmongo:29213
+        - name: NODE_ENV
+          value: prod
+        - name: NODE_PATH
+          value: /usr/app/node_modules
+        image: gcr.io/devproject-ashok/server:v1.0.0
+        name: server
+        ports:
+        - containerPort: 8000
+        resources: {}
+        volumeMounts:
+        - mountPath: /usr/app
+          name: server-claim0
+        - mountPath: /usr/app/node_modules
+          name: server-claim1
+      restartPolicy: Always
+      volumes:
+      - name: server-claim0
+        persistentVolumeClaim:
+          claimName: server-claim0
+      - name: server-claim1
+        persistentVolumeClaim:
+          claimName: server-claim1
+status: {}

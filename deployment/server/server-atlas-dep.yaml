@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: server 
+  name: server-controller
+spec:
+  selector:
+   matchLabels:
+    name: server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: server
+    spec:
+      containers:
+      - name: server
+        env:
+        - name: MONGODB_NS
+          value: todos
+        - name: MONGODB_URI
+          value: mongodb+srv://todo-user:osbNrw0kO7Dsbv28@todocluster-u2d6a.gcp.mongodb.net/admin?retryWrites=true
+        - name: NODE_ENV
+          value: prod
+        - name: NODE_PATH
+          value: /usr/app/node_modules
+        image: gcr.io/devproject-ashok/server:v1.0.2
+        ports:
+        - containerPort: 8000

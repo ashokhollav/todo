@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: dbmongo
+  name: mongo-controller
+spec:
+  selector:
+   matchLabels:
+    app: dbmongo
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: dbmongo
+        app: dbmongo
+    spec:
+      containers:
+      - image: mongo:3.6
+        name: dbmongo
+        ports:
+        - name: dbmongo
+          containerPort: 27017
+          hostPort: 27017
+        env:
+        - name: MONGO_DATA_DIR
+          value: /data/db
+        volumeMounts:
+        - mountPath: /data/db
+          name: dbmongo-claim0
+      volumes:
+      - name: dbmongo-claim0
+        persistentVolumeClaim:
+          claimName: dbmongo-claim0

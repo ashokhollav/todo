@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: ./kompose convert -f docker-compose.prod.yml
+    kompose.version: ""
+  creationTimestamp: null
+  labels:
+    name: dbmongo
+  name: dbmongo
+spec:
+  ports:
+    - port: 29213
+      targetPort: 29213
+  selector:
+    name: dbmongo
+status:
+  loadBalancer: {}

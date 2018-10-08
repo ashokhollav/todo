@@ -19,13 +19,15 @@ services:
 
   dbmongo:
     image: mongo:3.6
+    expose:
+      - '27017'
+      - '29213'
     environment:
       - MONGO_DATA_DIR=/data/db
     volumes:
       - ./data/db:/data/db
     ports:
-        - 29213:29213
-    command: mongod --port 29213 --smallfiles --logpath=/dev/null # --quiet
+        - 27017:27017
 
 
   server:
@@ -34,7 +36,6 @@ services:
     volumes:
       - ./server:/usr/app
       - /usr/app/node_modules
-      - /usr/app
     ports:
       - 8000:8000
     environment:

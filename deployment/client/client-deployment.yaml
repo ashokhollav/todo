@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: client
+  name: client-deploy
+spec:
+  selector:
+   matchLabels:
+    name: client
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: client
+    spec:
+      containers:
+      - name: client
+        env:
+        - name: REACT_APP_SERVER_URL
+          value: server:8001
+        - name: NODE_ENV
+          value: prod
+        - name: NODE_PATH
+          value: /usr/app/node_modules
+        image: gcr.io/devproject-ashok/client:v1.1.4
+        ports:
+        - containerPort: 80

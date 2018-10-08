@@ -1,0 +1,47 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: ./kompose convert -f docker-compose.prod.yml
+    kompose.version: ""
+  creationTimestamp: null
+  labels:
+    name: client
+  name: client
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        name: client
+    spec:
+      containers:
+      - env:
+        - name: NODE_ENV
+          value: prod
+        - name: NODE_PATH
+          value: /usr/app/node_modules
+        - name: SERVER_URL
+          value: server:8000
+        image: gcr.io/devproject-ashok/client:v1.0.0 
+        name: client
+        ports:
+        - containerPort: 80
+        resources: {}
+        volumeMounts:
+        - mountPath: /usr/app
+          name: client-claim0
+        - mountPath: /usr/app/node_modules
+          name: client-claim1
+      restartPolicy: Always
+      volumes:
+      - name: client-claim0
+        persistentVolumeClaim:
+          claimName: client-claim0
+      - name: client-claim1
+        persistentVolumeClaim:
+          claimName: client-claim1
+status: {}
